@@ -9,6 +9,8 @@ use App\Repositories\Interfaces\GalleryRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\TestimonialRepository;
 use App\Repositories\Interfaces\TestimonialRepositoryInterface;
+use App\Repositories\TeamMemberRepository;
+use App\Repositories\Interfaces\TeamMemberRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GalleryCategoryRepositoryInterface::class, GalleryCategoryRepository::class);
         $this->app->bind(GalleryRepositoryInterface::class, GalleryRepository::class);
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);
+        $this->app->bind(TeamMemberRepositoryInterface::class, TeamMemberRepository::class);
     }
 
     /**
