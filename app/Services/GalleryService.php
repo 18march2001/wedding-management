@@ -19,14 +19,14 @@ class GalleryService
         return $this->repository->create($data);
     }
 
-    public function getGalleryById(int $id)
+    public function getGalleryBySlug(string $slug)
     {
-        return $this->repository->findById($id);
+        return $this->repository->findBySlug($slug);
     }
 
-    public function updateGallery(int $id, array $data)
+    public function updateGallery(string $slug, array $data)
     {
-        return $this->repository->update($id, $data);
+        return $this->repository->update($slug, $data);
     }
 
     public function deleteGallery(int $id)

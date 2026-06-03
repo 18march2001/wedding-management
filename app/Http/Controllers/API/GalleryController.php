@@ -36,9 +36,9 @@ class GalleryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(string $slug)
     {
-        return $this->service->getGalleryById($id);
+        return $this->service->getGalleryBySlug($slug);
     }
 
     /**
@@ -59,6 +59,11 @@ class GalleryController extends Controller
      */
     public function destroy(int $id)
     {
-        return $this->service->deleteGallery($id);
+        $this->service->deleteGallery($id);
+
+        return response()->json([
+        'success' => true,
+        'message' => 'Gallery deleted successfully.'
+    ]);
     }
 }

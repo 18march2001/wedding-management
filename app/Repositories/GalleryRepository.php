@@ -3,7 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\GalleryModel;
-use App\Repositories\Interfaces\GalleryRepositoryInterface; 
+use App\Repositories\Interfaces\GalleryRepositoryInterface;
+use Illuminate\Support\Str; 
 
 class GalleryRepository implements GalleryRepositoryInterface
 {
@@ -12,9 +13,9 @@ class GalleryRepository implements GalleryRepositoryInterface
         return GalleryModel::with(['category', 'media'])->get();
     }
 
-    public function findById(int $id)
+    public function findBySlug(string $slug)
     {
-        return GalleryModel::with(['category', 'media'])->findOrFail($id);
+        return GalleryModel::with(['category', 'media'])->where('slug', $slug)->firstOrFail();
     }
 
     public function create(array $data)
@@ -22,6 +23,10 @@ class GalleryRepository implements GalleryRepositoryInterface
         $image = $data['image'] ?? null;
 
         unset($data['image']);
+
+        if (!isset($data['slug']) && isset($data['title'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
 
         $gallery = GalleryModel::create($data);
 
@@ -40,6 +45,10 @@ class GalleryRepository implements GalleryRepositoryInterface
         $image = $data['image'] ?? null;
 
         unset($data['image']);
+
+        if (!isset($data['slug']) && isset($data['title'])) {
+            $data['slug'] = Str::slug($data['title']);
+        }
 
         $gallery->update($data);
 

@@ -6,7 +6,7 @@ interface GalleryRepositoryInterface
 {
     public function getAll();
 
-    public function findById(int $id);
+    public function findBySlug(string $slug);
 
     public function create(array $data);
 
