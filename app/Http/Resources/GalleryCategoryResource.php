@@ -13,6 +13,7 @@ class GalleryCategoryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'description' => $this->description,
         ];
     }
 }

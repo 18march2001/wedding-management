@@ -15,7 +15,8 @@ Route::apiResource('team-members', TeamMemberController::class)
     ->only(['index', 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
-    Route::post('/logout', [AuthController::class,'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     //Gallery categories
     Route::apiResource('gallery-categories', GalleryCategoryController::class);

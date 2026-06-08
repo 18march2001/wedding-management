@@ -23,21 +23,22 @@ class GalleryCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = $this->route('gallery-category') ?? $this->route('id');
+        $categoryId = $this->route('gallery_category') ?? $this->route('gallery-category');
+        $id = is_object($categoryId) ? $categoryId->id : $categoryId;
 
         return [
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('gallery_category', 'name')->ignore($categoryId),
+                Rule::unique('gallery_category', 'name')->ignore($id),
             ],
             'description' => 'nullable|string',
             'slug' => [
                 'nullable',
                 'string',
                 'max:255',
-                Rule::unique('gallery_category', 'slug')->ignore($categoryId),
+                Rule::unique('gallery_category', 'slug')->ignore($id),
             ],
         ];
     }
