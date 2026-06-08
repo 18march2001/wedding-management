@@ -2,17 +2,11 @@
 
 namespace App\Repositories\Interfaces;
 
-interface GalleryRepositoryInterface
+interface VideoRepositoryInterface
 {
     public function getAll();
-
-    public function findBySlug(string $slug);
-
+    public function findById(int $id);
     public function create(array $data);
-
     public function update(int $id, array $data);
-
     public function delete(int $id);
-
-    public function addImages(int $id, array $images);
 }

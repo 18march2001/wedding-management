@@ -33,7 +33,9 @@ class GalleryRequest extends FormRequest
                     ->ignore($this->route('gallery')),
             ],
             'gallery_category_id' => 'required|exists:gallery_category,id',
-            'image' => 'sometimes|nullable|image|max:10240',
+            'cover_image' => 'required|mimes:jpg,jpeg,png,webp|image|max:10240',
+            'gallery_images' => ['required', 'array'],
+            'gallery_images.*' => 'mimes:jpg,jpeg,png,webp|image|max:10240',
             'location' => 'nullable|string|max:255',
             'event_date' => 'nullable|date',
         ];

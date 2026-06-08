@@ -62,8 +62,26 @@ class GalleryController extends Controller
         $this->service->deleteGallery($id);
 
         return response()->json([
-        'success' => true,
-        'message' => 'Gallery deleted successfully.'
-    ]);
+            'success' => true,
+            'message' => 'Gallery deleted successfully.'
+        ]);
+    }
+
+    public function addImages(Request $request)
+    {
+        $request->validate([
+            'gallery_id' => 'required|exists:galleries,id',
+            'images' => 'required|array',
+            'images.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:10240',
+        ]);
+
+        $galleryId = $request->input('gallery_id');
+        $images = $request->file('images');
+        $this->service->addImagesToGallery($galleryId, $images);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Images added successfully to the gallery.'
+        ]);
     }
 }

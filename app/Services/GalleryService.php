@@ -33,4 +33,9 @@ class GalleryService
     {
         return $this->repository->delete($id);
     }
+
+    public function addImagesToGallery(int $id, array $images)
+    {
+        return $this->repository->addImages($id, $images);
+    }
 }
