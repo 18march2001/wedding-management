@@ -29,6 +29,8 @@ export type {
   UpdateTeamMemberPayload,
 } from './team-member.types'
 
+export type { Inquiry, InquiryFilters } from './inquiry.types'
+
 export type {
   User,
   UserRole,
