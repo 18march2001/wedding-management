@@ -100,7 +100,7 @@ const navGroups = [
     label: 'Admin',
     items: [
       { label: 'Team Members', to: '/team-members', icon: icons.users },
-      { label: 'Contact Details', to: '/contacts', icon: icons.contacts },
+      { label: 'Contact Details', to: '/settings', icon: icons.contacts },
     ],
   },
 ]
