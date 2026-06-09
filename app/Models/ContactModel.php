@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class ContactModel extends Model
+class ContactModel extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'contacts';
 
     protected $fillable = [
-        'id',
         'phone_number',
         'whatsapp_number',
         'email',
@@ -17,5 +20,12 @@ class ContactModel extends Model
         'business_hours',
         'facebook_url',
         'instagram_url',
+        'website_content',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('hero_slider')
+            ->useDisk('public');
+    }
 }

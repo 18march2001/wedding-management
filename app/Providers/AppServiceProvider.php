@@ -13,6 +13,8 @@ use App\Repositories\TeamMemberRepository;
 use App\Repositories\Interfaces\TeamMemberRepositoryInterface;
 use App\Repositories\VideoRepository;
 use App\Repositories\Interfaces\VideoRepositoryInterface;
+use App\Repositories\InquiryRepository;
+use App\Repositories\Interfaces\InquiryRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);
         $this->app->bind(TeamMemberRepositoryInterface::class, TeamMemberRepository::class);
         $this->app->bind(VideoRepositoryInterface::class, VideoRepository::class);
+        $this->app->bind(InquiryRepositoryInterface::class, InquiryRepository::class);
     }
 
     /**

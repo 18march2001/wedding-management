@@ -8,8 +8,11 @@ use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\TeamMemberController;
 use App\Http\Controllers\API\VideoController;
 use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\WebsiteSettingsController;
+use App\Http\Controllers\API\InquiryController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/inquiries', [InquiryController::class, 'store']);
 Route::apiResource('galleries', GalleryController::class)
     ->only(['index', 'show']);
 Route::apiResource('team-members', TeamMemberController::class)
@@ -36,4 +39,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/contact-settings', [ContactController::class, 'index']);
     Route::post('/contact-settings', [ContactController::class, 'update']);
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/website', [WebsiteSettingsController::class, 'index']);
+        Route::put('/website', [WebsiteSettingsController::class, 'update']);
+        Route::post('/website/slider-images', [WebsiteSettingsController::class, 'uploadSliderImages']);
+        Route::delete('/website/slider-images/{mediaId}', [WebsiteSettingsController::class, 'deleteSliderImage']);
+    });
+
+    Route::get('/inquiries', [InquiryController::class, 'index']);
+    Route::get('/inquiries/{id}', [InquiryController::class, 'show']);
+    Route::delete('/inquiries/{id}', [InquiryController::class, 'destroy']);
 });
