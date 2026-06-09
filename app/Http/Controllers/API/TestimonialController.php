@@ -3,62 +3,49 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\TestimonialResource;
 use App\Services\TestimonialService;
 use App\Http\Requests\TestimonialRequest;
+use Illuminate\Http\Request;
 
 class TestimonialController extends Controller
 {
-    public function __construct(TestimonialService $service)
+    public function __construct(
+        private TestimonialService $service
+    ) {}
+
+    public function index(Request $request)
     {
-        $this->service = $service;
-    }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return $this->service->getAllTestimonials();
+        $testimonials = $this->service->getAllTestimonials(
+            $request->only('search', 'page', 'per_page')
+        );
+
+        return TestimonialResource::collection($testimonials);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(TestimonialRequest $request)
     {
-        $data = $request->validated();
+        $testimonial = $this->service->createTestimonial($request->validated());
 
-        return $this->service->createTestimonial($data);
+        return new TestimonialResource($testimonial);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(int $id)
     {
-        return $this->service->getTestimonialById($id);
+        return new TestimonialResource($this->service->getTestimonialById($id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(TestimonialRequest $request, string $id)
+    public function update(TestimonialRequest $request, int $id)
     {
-        $data = $request->validated();
+        $testimonial = $this->service->updateTestimonial($id, $request->validated());
 
-        return $this->service->updateTestimonial($id, $data);
+        return new TestimonialResource($testimonial);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
         $this->service->deleteTestimonial($id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Testimonial deleted successfully.'
-        ]);
+        return response()->json(['message' => 'Testimonial deleted successfully.']);
     }
 }

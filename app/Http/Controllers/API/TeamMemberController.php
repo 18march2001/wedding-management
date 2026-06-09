@@ -9,6 +9,7 @@ use App\Http\Resources\TeamMemberResource;
 use App\Services\TeamMemberService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * TeamMemberController
@@ -33,9 +34,11 @@ class TeamMemberController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teamMembers = $this->service->getTeamMembers();
+        $teamMembers = $this->service->getTeamMembers(
+            $request->only('search', 'page', 'per_page')
+        );
 
         return TeamMemberResource::collection($teamMembers);
     }

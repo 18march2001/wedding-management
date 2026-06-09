@@ -14,7 +14,7 @@ interface TeamMemberRepositoryInterface
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAll();
+    public function getAll(array $filters = []);
 
     /**
      * Find a team member by ID.

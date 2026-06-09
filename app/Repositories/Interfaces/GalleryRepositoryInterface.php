@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 interface GalleryRepositoryInterface
 {
-    public function getAll();
+    public function getAll(array $filters = []);
 
     public function findBySlug(string $slug);
 
@@ -15,4 +15,10 @@ interface GalleryRepositoryInterface
     public function delete(int $id);
 
     public function addImages(int $id, array $images);
+
+    public function findByIdWithImages(int $id);
+
+    public function updateImage(int $mediaId, array $data);
+
+    public function deleteImage(int $mediaId);
 }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Resources\VideoResource;
 use App\Services\VideoService;
 use App\Http\Requests\VideoRequest;
+use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
@@ -13,44 +14,40 @@ class VideoController extends Controller
         private VideoService $service
     ) {}
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->service->getVideos();
+        $videos = $this->service->getVideos(
+            $request->only('search', 'gallery_id', 'page', 'per_page')
+        );
+
+        return VideoResource::collection($videos);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(VideoRequest $request)
     {
-        return $this->service->createVideo($request->validated());
+        $video = $this->service->createVideo($request->validated());
 
+        return new VideoResource($video);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(int $id)
     {
-        return $this->service->getVideoById($id);
+        $video = $this->service->getVideoById($id);
+
+        return new VideoResource($video);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(VideoRequest $request, string $id)
+    public function update(VideoRequest $request, int $id)
     {
-        return $this->service->updateVideo($id, $request->validated());
+        $video = $this->service->updateVideo($id, $request->validated());
+
+        return new VideoResource($video);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        return $this->service->deleteVideo($id);
+        $this->service->deleteVideo($id);
+
+        return response()->json(['message' => 'Video deleted successfully.']);
     }
 }

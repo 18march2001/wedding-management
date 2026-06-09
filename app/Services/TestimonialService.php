@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Repositories\Interfaces\TestimonialRepositoryInterface;
 
 class TestimonialService
@@ -9,14 +10,14 @@ class TestimonialService
         private TestimonialRepositoryInterface $repository
     ) {}
 
-    public function getAllTestimonials()
+    public function getAllTestimonials(array $filters = [])
     {
-        return $this->repository->all();
+        return $this->repository->getAll($filters);
     }
 
-    public function getTestimonialById($id)
+    public function getTestimonialById(int $id)
     {
-        return $this->repository->find($id);
+        return $this->repository->findById($id);
     }
 
     public function createTestimonial(array $data)
@@ -24,12 +25,12 @@ class TestimonialService
         return $this->repository->create($data);
     }
 
-    public function updateTestimonial($id, array $data)
+    public function updateTestimonial(int $id, array $data)
     {
         return $this->repository->update($id, $data);
     }
 
-    public function deleteTestimonial($id)
+    public function deleteTestimonial(int $id)
     {
         return $this->repository->delete($id);
     }

@@ -9,9 +9,9 @@ class GalleryService
         private GalleryRepositoryInterface $repository
     ) {}
 
-    public function getGalleries()
+    public function getGalleries(array $filters = [])
     {
-        return $this->repository->getAll();
+        return $this->repository->getAll($filters);
     }
 
     public function createGallery(array $data)
@@ -24,9 +24,9 @@ class GalleryService
         return $this->repository->findBySlug($slug);
     }
 
-    public function updateGallery(string $slug, array $data)
+    public function updateGallery(int $id, array $data)
     {
-        return $this->repository->update($slug, $data);
+        return $this->repository->update($id, $data);
     }
 
     public function deleteGallery(int $id)
@@ -37,5 +37,20 @@ class GalleryService
     public function addImagesToGallery(int $id, array $images)
     {
         return $this->repository->addImages($id, $images);
+    }
+
+    public function getGalleryById(int $id)
+    {
+        return $this->repository->findByIdWithImages($id);
+    }
+
+    public function updateGalleryImage(int $mediaId, array $data)
+    {
+        return $this->repository->updateImage($mediaId, $data);
+    }
+
+    public function deleteGalleryImage(int $mediaId)
+    {
+        return $this->repository->deleteImage($mediaId);
     }
 }

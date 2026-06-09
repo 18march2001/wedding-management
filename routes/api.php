@@ -7,6 +7,7 @@ use App\Http\Controllers\API\GalleryController;
 use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\TeamMemberController;
 use App\Http\Controllers\API\VideoController;
+use App\Http\Controllers\API\ContactController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::apiResource('galleries', GalleryController::class)
@@ -28,7 +29,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('team-members', TeamMemberController::class)->only(['store', 'update', 'destroy']);
 
     Route::post('/galleries/add-images', [GalleryController::class, 'addImages']);
+    Route::get('/gallery-images/{id}', [GalleryController::class, 'getImagesById']);
+    Route::put('/gallery-images/{mediaId}', [GalleryController::class, 'updateImage']);
+    Route::delete('/gallery-images/{mediaId}', [GalleryController::class, 'deleteImage']);
     Route::apiResource('videos', VideoController::class);
 
-    Route::post('/contacts', [ContactController::class, 'update']);
+    Route::get('/contact-settings', [ContactController::class, 'index']);
+    Route::post('/contact-settings', [ContactController::class, 'update']);
 });

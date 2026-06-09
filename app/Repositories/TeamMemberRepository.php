@@ -27,11 +27,16 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getAll()
+    public function getAll(array $filters = [])
     {
-        return $this->model->query()
-            ->latest()
-            ->paginate(10);
+        $query = $this->model->query()->latest();
+
+        if (!empty($filters['search'])) {
+            $query->where('name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('designation', 'like', '%' . $filters['search'] . '%');
+        }
+
+        return $query->paginate($filters['per_page'] ?? 10, ['*'], 'page', $filters['page'] ?? 1);
     }
 
     /**

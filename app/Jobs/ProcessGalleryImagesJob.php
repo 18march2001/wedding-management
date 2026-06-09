@@ -34,9 +34,5 @@ class ProcessGalleryImagesJob implements ShouldQueue
 
             Storage::delete($path);
         }
-
-        $gallery->update([
-            'status' => 'completed'
-        ]);
     }
 }

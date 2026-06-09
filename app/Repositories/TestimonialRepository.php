@@ -1,17 +1,25 @@
 <?php
 
 namespace App\Repositories;
+
 use App\Models\TestimonialModel;
 use App\Repositories\Interfaces\TestimonialRepositoryInterface;
 
 class TestimonialRepository implements TestimonialRepositoryInterface
 {
-    public function all()
+    public function getAll(array $filters = [])
     {
-        return TestimonialModel::all();
+        $query = TestimonialModel::latest();
+
+        if (!empty($filters['search'])) {
+            $query->where('name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+        }
+
+        return $query->paginate($filters['per_page'] ?? 10, ['*'], 'page', $filters['page'] ?? 1);
     }
 
-    public function find($id)
+    public function findById(int $id)
     {
         return TestimonialModel::findOrFail($id);
     }
@@ -21,16 +29,16 @@ class TestimonialRepository implements TestimonialRepositoryInterface
         return TestimonialModel::create($data);
     }
 
-    public function update($id, array $data)
+    public function update(int $id, array $data)
     {
-        $testimonial = $this->find($id);
+        $testimonial = $this->findById($id);
         $testimonial->update($data);
-        return $testimonial;
+        return $testimonial->fresh();
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
-        $testimonial = $this->find($id);
-        return $testimonial->delete();
+        $testimonial = $this->findById($id);
+        $testimonial->delete();
     }
 }

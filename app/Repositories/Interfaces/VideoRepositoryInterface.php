@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 interface VideoRepositoryInterface
 {
-    public function getAll();
+    public function getAll(array $filters = []);
     public function findById(int $id);
     public function create(array $data);
     public function update(int $id, array $data);

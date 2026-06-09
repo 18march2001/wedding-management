@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Repositories\Interfaces\VideoRepositoryInterface;
 
 class VideoService
@@ -9,9 +10,9 @@ class VideoService
         private VideoRepositoryInterface $repository
     ) {}
 
-    public function getVideos()
+    public function getVideos(array $filters = [])
     {
-        return $this->repository->getAll();
+        return $this->repository->getAll($filters);
     }
 
     public function createVideo(array $data)
@@ -19,17 +20,17 @@ class VideoService
         return $this->repository->create($data);
     }
 
-    public function getVideoById(string $id)
+    public function getVideoById(int $id)
     {
         return $this->repository->findById($id);
     }
 
-    public function updateVideo(string $id, array $data)
+    public function updateVideo(int $id, array $data)
     {
         return $this->repository->update($id, $data);
     }
 
-    public function deleteVideo(string $id)
+    public function deleteVideo(int $id)
     {
         return $this->repository->delete($id);
     }

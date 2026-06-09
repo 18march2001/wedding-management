@@ -27,9 +27,9 @@ class TeamMemberService
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function getTeamMembers()
+    public function getTeamMembers(array $filters = [])
     {
-        return $this->repository->getAll();
+        return $this->repository->getAll($filters);
     }
 
     /**

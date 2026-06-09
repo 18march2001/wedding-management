@@ -20,12 +20,11 @@ class GalleryModel extends Model implements HasMedia
         'slug',
         'location',
         'event_date',
-        'status',
     ];
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('cover')
+        $this->addMediaCollection('cover_image')
             ->singleFile();
 
         $this->addMediaCollection('gallery');
@@ -34,12 +33,10 @@ class GalleryModel extends Model implements HasMedia
     public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->width(400)
-            ->queued();
+            ->width(400);
 
         $this->addMediaConversion('medium')
-            ->width(1200)
-            ->queued();
+            ->width(1200);
     }
 
     public function category()
