@@ -23,6 +23,13 @@ class TestimonialController extends Controller
         return TestimonialResource::collection($testimonials);
     }
 
+    public function publicIndex()
+    {
+        $testimonials = \App\Models\TestimonialModel::latest()->get();
+
+        return TestimonialResource::collection($testimonials);
+    }
+
     public function store(TestimonialRequest $request)
     {
         $testimonial = $this->service->createTestimonial($request->validated());

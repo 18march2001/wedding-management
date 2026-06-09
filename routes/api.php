@@ -13,21 +13,25 @@ use App\Http\Controllers\API\InquiryController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/inquiries', [InquiryController::class, 'store']);
+Route::get('/settings/website', [WebsiteSettingsController::class, 'index']);
 Route::apiResource('galleries', GalleryController::class)
     ->only(['index', 'show']);
 Route::apiResource('team-members', TeamMemberController::class)
     ->only(['index', 'show']);
+Route::get('/gallery-categories', [GalleryCategoryController::class, 'publicIndex']);
+Route::get('/testimonials', [TestimonialController::class, 'publicIndex']);
+Route::get('/contact-settings', [ContactController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //Gallery categories
-    Route::apiResource('gallery-categories', GalleryCategoryController::class);
+    Route::apiResource('gallery-categories', GalleryCategoryController::class)->except(['index']);
     //Galleries
     Route::apiResource('galleries', GalleryController::class)->except(['index', 'show']);
     //Testimonials
-    Route::apiResource('testimonials', TestimonialController::class);
+    Route::apiResource('testimonials', TestimonialController::class)->except(['index']);
     //Team Members
     Route::apiResource('team-members', TeamMemberController::class)->only(['store', 'update', 'destroy']);
 
@@ -37,11 +41,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/gallery-images/{mediaId}', [GalleryController::class, 'deleteImage']);
     Route::apiResource('videos', VideoController::class);
 
-    Route::get('/contact-settings', [ContactController::class, 'index']);
     Route::post('/contact-settings', [ContactController::class, 'update']);
 
     Route::prefix('settings')->group(function () {
-        Route::get('/website', [WebsiteSettingsController::class, 'index']);
         Route::put('/website', [WebsiteSettingsController::class, 'update']);
         Route::post('/website/slider-images', [WebsiteSettingsController::class, 'uploadSliderImages']);
         Route::delete('/website/slider-images/{mediaId}', [WebsiteSettingsController::class, 'deleteSliderImage']);

@@ -25,6 +25,13 @@ class GalleryCategoryController extends Controller
         );
     }
 
+    public function publicIndex()
+    {
+        $categories = \App\Models\GalleryCategoryModel::orderBy('created_at', 'asc')->get();
+
+        return GalleryCategoryResource::collection($categories);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
