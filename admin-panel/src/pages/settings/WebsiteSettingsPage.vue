@@ -46,6 +46,24 @@
               class="content-textarea"
             />
           </div>
+
+          <!-- Content Images -->
+          <div class="content-images-row">
+            <div v-for="pos in ['left', 'right'] as const" :key="pos" class="field">
+              <label>{{ pos === 'left' ? 'Left Side Image' : 'Right Side Image' }}</label>
+              <div v-if="pos === 'left' ? store.leftSideImage : store.rightSideImage" class="content-image-preview">
+                <img :src="(pos === 'left' ? store.leftSideImage : store.rightSideImage)!.url" alt="Content image" />
+                <button class="delete-btn delete-btn--uploaded" title="Remove" @click="handleDeleteContentImage(pos)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                </button>
+              </div>
+              <label v-else class="upload-area upload-area--small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>Click to upload</span>
+                <input type="file" accept="image/jpg,image/jpeg,image/png,image/webp" class="hidden-input" @change="(e) => handleContentImageChange(pos, e)" />
+              </label>
+            </div>
+          </div>
         </div>
         <div class="card-footer">
           <button class="btn btn-gold" :disabled="store.isSaving" @click="handleSaveContent">
@@ -198,6 +216,34 @@ const handleUpload = async () => {
     ui.showSuccess('Images uploaded successfully.')
   } catch (err: any) {
     ui.showError(err?.message || 'Failed to upload images.')
+  }
+}
+
+const handleDeleteContentImage = async (position: 'left' | 'right') => {
+  const image = position === 'left' ? store.leftSideImage : store.rightSideImage
+  if (!image) return
+  const confirmed = await ui.confirm({
+    title: 'Delete Image?',
+    message: 'This content image will be permanently deleted.',
+    confirmText: 'Delete',
+  })
+  if (!confirmed) return
+  try {
+    await store.deleteContentImage(position, image.id)
+    ui.showSuccess('Image deleted.')
+  } catch (err: any) {
+    ui.showError(err?.message || 'Failed to delete image.')
+  }
+}
+
+const handleContentImageChange = async (position: 'left' | 'right', e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  try {
+    await store.uploadContentImage(position, file)
+    ui.showSuccess(`${position === 'left' ? 'Left' : 'Right'} side image updated.`)
+  } catch (err: any) {
+    ui.showError(err?.message || 'Failed to upload image.')
   }
 }
 
@@ -411,6 +457,42 @@ const handleDeleteImage = async (mediaId: number) => {
 @media (max-width: 640px) {
   .image-grid {
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+}
+
+.content-images-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.content-image-preview {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.content-image-preview img {
+  display: block;
+  height: 160px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.content-image-preview:hover .delete-btn {
+  opacity: 1;
+}
+
+.upload-area--small {
+  cursor: pointer;
+  min-height: 160px;
+  font-size: 12px;
+}
+
+@media (max-width: 640px) {
+  .content-images-row {
+    grid-template-columns: 1fr;
   }
 }
 </style>

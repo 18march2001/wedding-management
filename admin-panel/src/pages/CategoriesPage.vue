@@ -34,6 +34,7 @@
         <thead>
           <tr>
             <th>#</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Slug</th>
             <th>Description</th>
@@ -43,6 +44,10 @@
         <tbody>
           <tr v-for="(cat, i) in store.categories" :key="cat.id">
             <td class="col-num">{{ (store.pagination.currentPage - 1) * store.pagination.perPage + i + 1 }}</td>
+            <td class="col-img">
+              <img v-if="cat.image_url" :src="cat.image_url" class="cat-thumb" />
+              <span v-else class="no-img">—</span>
+            </td>
             <td class="col-name">{{ cat.name }}</td>
             <td><span class="slug-badge">{{ cat.slug }}</span></td>
             <td class="col-desc">{{ cat.description || '—' }}</td>
@@ -91,6 +96,18 @@
             <textarea v-model="form.description" rows="3" placeholder="Optional description..." />
           </div>
 
+          <div class="field">
+            <label>Image</label>
+            <input type="file" accept="image/*" @change="onImageChange" />
+            <img v-if="imagePreview" :src="imagePreview" class="img-preview" />
+          </div>
+
+          <div class="field">
+            <label>Video <span class="field-hint">(shown as hero on gallery page)</span></label>
+            <input type="file" accept="video/*" @change="onVideoChange" />
+            <video v-if="videoPreview" :src="videoPreview" class="video-preview" muted playsinline controls />
+          </div>
+
           <div v-if="submitError" class="submit-error">{{ submitError }}</div>
 
           <div class="modal-actions">
@@ -122,6 +139,22 @@ const form = reactive({ name: '', description: '' })
 const formErrors = reactive<Record<string, string>>({})
 const submitError = ref('')
 const isSubmitting = ref(false)
+const imageFile = ref<File | null>(null)
+const imagePreview = ref<string | null>(null)
+const videoFile = ref<File | null>(null)
+const videoPreview = ref<string | null>(null)
+
+const onImageChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0] ?? null
+  imageFile.value = file
+  imagePreview.value = file ? URL.createObjectURL(file) : null
+}
+
+const onVideoChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0] ?? null
+  videoFile.value = file
+  videoPreview.value = file ? URL.createObjectURL(file) : null
+}
 
 onMounted(() => store.fetchCategories())
 
@@ -135,6 +168,10 @@ const changePage = (page: number) => store.fetchCategories(page, search.value)
 const openModal = (cat?: GalleryCategory) => {
   Object.assign(formErrors, { name: '' })
   submitError.value = ''
+  imageFile.value = null
+  imagePreview.value = cat?.image_url ?? null
+  videoFile.value = null
+  videoPreview.value = cat?.video_url ?? null
   if (cat) {
     modal.editing = true
     modal.id = cat.id
@@ -162,7 +199,12 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true
   try {
-    const payload = { name: form.name.trim(), description: form.description.trim() || undefined }
+    const payload = {
+      name: form.name.trim(),
+      description: form.description.trim() || undefined,
+      ...(imageFile.value ? { image: imageFile.value } : {}),
+      ...(videoFile.value ? { video: videoFile.value } : {}),
+    }
     if (modal.editing) {
       await store.updateCategory(modal.id, payload)
       ui.showSuccess('Category updated successfully.')
@@ -249,6 +291,43 @@ const handleDelete = async (cat: GalleryCategory) => {
 
 .state-box--error {
   color: var(--danger);
+}
+
+.col-img {
+  width: 60px;
+}
+
+.cat-thumb {
+  border-radius: 4px;
+  height: 40px;
+  object-fit: cover;
+  width: 54px;
+}
+
+.no-img {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.img-preview {
+  border-radius: 6px;
+  height: 100px;
+  margin-top: 6px;
+  object-fit: cover;
+  width: 160px;
+}
+
+.video-preview {
+  border-radius: 6px;
+  margin-top: 6px;
+  max-height: 120px;
+  width: 100%;
+}
+
+.field-hint {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
 }
 
 .col-num {

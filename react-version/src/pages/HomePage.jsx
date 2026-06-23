@@ -10,7 +10,7 @@ import Footer from '../components/Footer';
 import { useWebsiteSettings } from '../hooks/useWebsiteSettings';
 
 export default function HomePage() {
-  const { heroSliderImages, websiteContent, loading } = useWebsiteSettings();
+  const { heroSliderImages, websiteContent, leftSideImage, rightSideImage, loading } = useWebsiteSettings();
 
   return (
     <div id="all">
@@ -18,7 +18,7 @@ export default function HomePage() {
       <div id="home">
         <Navbar />
         <HeroCarousel images={heroSliderImages} loading={loading} />
-        <DescriptionSection websiteContent={websiteContent} />
+        <DescriptionSection websiteContent={websiteContent} leftSideImage={leftSideImage} rightSideImage={rightSideImage} />
         <CategorySection />
         <TestimonialSection />
         <TeamSection />

@@ -12,7 +12,8 @@ class GalleryRepository implements GalleryRepositoryInterface
 {
     public function getAll(array $filters = [])
     {
-        $query = GalleryModel::with(['category', 'media'])
+        $query = GalleryModel::with(['category', 'media' => fn($q) => $q->where('collection_name', 'cover_image')])
+            ->withCount(['media as images_count' => fn($q) => $q->where('collection_name', 'gallery')])
             ->latest();
 
         if (!empty($filters['search'])) {

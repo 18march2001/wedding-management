@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios'
 import { ApiError } from '@/types'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
-const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT || 30000)
+const API_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT || 120000)
 const TOKEN_KEY = 'acp_admin_token'
 
 class ApiClient {

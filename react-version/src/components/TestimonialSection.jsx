@@ -52,7 +52,7 @@ export default function TestimonialSection() {
             >
               {testimonials.map((t, i) => (
                 <SwiperSlide key={t.id ?? i}>
-                  <img className="testimonial-image" src={t.image} alt={t.name} loading="lazy" />
+                <img className="testimonial-image" src={t.photo_url} alt={t.name} loading="lazy" />
                 </SwiperSlide>
               ))}
             </Swiper>

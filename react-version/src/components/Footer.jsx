@@ -1,4 +1,8 @@
+import { useContactSettings } from '../hooks/useContactSettings';
+
 export default function Footer() {
+  const contact = useContactSettings();
+
   const scrollToSection = (selector) => {
     const el = document.querySelector(selector);
     if (el) {
@@ -42,11 +46,11 @@ export default function Footer() {
             <li className="footer-links-header"><h4>Contact Info</h4></li>
             <li className="contact-group" style={{ marginBottom: '10px' }}>
               <img className="footer-social-icon" src="/images/call-svgrepo-com.svg" alt="Phone" />
-              <a href="tel:+91 9099825258">+91 9099825258</a>
+              <a href={`tel:${contact.phone_number}`}>{contact.phone_number}</a>
             </li>
             <li className="contact-group">
               <img className="footer-social-icon" src="/images/email-8-svgrepo-com.svg" alt="Email" />
-              anilchauhanphoto@gmail.com
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
             </li>
           </ul>
         </div>

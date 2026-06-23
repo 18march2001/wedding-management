@@ -70,10 +70,10 @@ export default function CategorySection() {
                 alt=""
               />
             </Link>
-            {cat.cover_image_url ? (
+            {cat.image_url ? (
               <img
                 className="overlay-img"
-                src={cat.cover_image_url}
+                src={cat.image_url}
                 alt={cat.name}
                 loading="lazy"
               />

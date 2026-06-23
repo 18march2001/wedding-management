@@ -19,6 +19,7 @@ Route::apiResource('galleries', GalleryController::class)
 Route::apiResource('team-members', TeamMemberController::class)
     ->only(['index', 'show']);
 Route::get('/gallery-categories', [GalleryCategoryController::class, 'publicIndex']);
+Route::get('/gallery-images/{id}', [GalleryController::class, 'getImagesById']);
 Route::get('/testimonials', [TestimonialController::class, 'publicIndex']);
 Route::get('/contact-settings', [ContactController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
@@ -36,7 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('team-members', TeamMemberController::class)->only(['store', 'update', 'destroy']);
 
     Route::post('/galleries/add-images', [GalleryController::class, 'addImages']);
-    Route::get('/gallery-images/{id}', [GalleryController::class, 'getImagesById']);
     Route::put('/gallery-images/{mediaId}', [GalleryController::class, 'updateImage']);
     Route::delete('/gallery-images/{mediaId}', [GalleryController::class, 'deleteImage']);
     Route::apiResource('videos', VideoController::class);
@@ -47,6 +47,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/website', [WebsiteSettingsController::class, 'update']);
         Route::post('/website/slider-images', [WebsiteSettingsController::class, 'uploadSliderImages']);
         Route::delete('/website/slider-images/{mediaId}', [WebsiteSettingsController::class, 'deleteSliderImage']);
+        Route::post('/website/content-images', [WebsiteSettingsController::class, 'uploadContentImage']);
+        Route::delete('/website/content-images/{mediaId}', [WebsiteSettingsController::class, 'deleteContentImage']);
     });
 
     Route::get('/inquiries', [InquiryController::class, 'index']);
