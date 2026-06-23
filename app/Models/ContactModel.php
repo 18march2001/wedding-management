@@ -27,5 +27,8 @@ class ContactModel extends Model implements HasMedia
     {
         $this->addMediaCollection('hero_slider')
             ->useDisk('public');
+
+        $this->addMediaCollection('website_content')
+            ->useDisk('public');
     }
 }

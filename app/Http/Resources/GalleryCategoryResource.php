@@ -14,6 +14,8 @@ class GalleryCategoryResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'image_url' => $this->getFirstMediaUrl('category_image') ?: null,
+            'video_url' => $this->getFirstMediaUrl('category_video') ?: null,
         ];
     }
 }

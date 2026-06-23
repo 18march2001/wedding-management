@@ -28,6 +28,7 @@
         <thead>
           <tr>
             <th>#</th>
+            <th>Photo</th>
             <th>Name</th>
             <th>Description</th>
             <th>Date</th>
@@ -37,6 +38,10 @@
         <tbody>
           <tr v-for="(testimonial, i) in store.testimonials" :key="testimonial.id">
             <td class="col-num">{{ (store.pagination.currentPage - 1) * store.pagination.perPage + i + 1 }}</td>
+            <td class="col-img">
+              <img v-if="testimonial.photo_url" :src="testimonial.photo_url" class="t-thumb" />
+              <span v-else class="no-img">—</span>
+            </td>
             <td class="col-name">{{ testimonial.name }}</td>
             <td class="col-desc">{{ testimonial.description || '—' }}</td>
             <td class="col-muted">{{ formatDate(testimonial.created_at) }}</td>
@@ -78,6 +83,12 @@
             <span v-if="formErrors.description" class="field-error">{{ formErrors.description }}</span>
           </div>
 
+          <div class="field">
+            <label>Photo <span class="optional">(optional)</span></label>
+            <input type="file" accept="image/*" @change="onPhotoChange" />
+            <img v-if="photoPreview" :src="photoPreview" class="photo-preview" />
+          </div>
+
           <div v-if="submitError" class="submit-error">{{ submitError }}</div>
 
           <div class="modal-actions">
@@ -109,6 +120,14 @@ const form = reactive({ name: '', description: '' })
 const formErrors = reactive<Record<string, string>>({})
 const submitError = ref('')
 const isSubmitting = ref(false)
+const photoFile = ref<File | null>(null)
+const photoPreview = ref<string | null>(null)
+
+const onPhotoChange = (e: Event) => {
+  const file = (e.target as HTMLInputElement).files?.[0] ?? null
+  photoFile.value = file
+  photoPreview.value = file ? URL.createObjectURL(file) : null
+}
 
 onMounted(() => store.fetchTestimonials({ page: 1 }))
 
@@ -125,6 +144,8 @@ const changePage = (page: number) => store.fetchTestimonials({ page, search: sea
 const openModal = (testimonial?: Testimonial) => {
   Object.keys(formErrors).forEach((k) => (formErrors[k] = ''))
   submitError.value = ''
+  photoFile.value = null
+  photoPreview.value = testimonial?.photo_url ?? null
   if (testimonial) {
     modal.editing = true
     modal.id = testimonial.id
@@ -152,6 +173,7 @@ const handleSubmit = async () => {
     const payload = {
       name: form.name.trim(),
       description: form.description.trim() || undefined,
+      ...(photoFile.value ? { photo: photoFile.value } : {}),
     }
     if (modal.editing) {
       await store.updateTestimonial(modal.id, payload)
@@ -227,6 +249,25 @@ const handleDelete = async (testimonial: Testimonial) => {
 
 .state-box { color: var(--muted); font-size: 13px; padding: 48px; text-align: center; }
 .state-box--error { color: var(--danger); }
+
+.col-img { width: 60px; }
+
+.t-thumb {
+  border-radius: 50%;
+  height: 40px;
+  object-fit: cover;
+  width: 40px;
+}
+
+.no-img { color: var(--muted); font-size: 13px; }
+
+.photo-preview {
+  border-radius: 50%;
+  height: 80px;
+  margin-top: 6px;
+  object-fit: cover;
+  width: 80px;
+}
 
 .col-num { color: var(--muted); font-size: 12px; width: 40px; }
 .col-name { font-weight: 500; min-width: 160px; }

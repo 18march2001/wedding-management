@@ -14,11 +14,25 @@ export async function fetchGalleryCategories() {
   return json.data;
 }
 
-export async function fetchGalleries() {
-  const response = await fetch(`${API_BASE_URL}/galleries?per_page=100`);
+export async function fetchGalleries(params = '') {
+  const response = await fetch(`${API_BASE_URL}/galleries?per_page=100${params ? '&' + params : ''}`);
   if (!response.ok) throw new Error(`Failed to fetch galleries: ${response.status}`);
   const json = await response.json();
   return json.data;
+}
+
+export async function fetchGalleriesByCategory(categoryId) {
+  const response = await fetch(`${API_BASE_URL}/galleries?gallery_category_id=${categoryId}&per_page=100`);
+  if (!response.ok) throw new Error(`Failed to fetch galleries: ${response.status}`);
+  const json = await response.json();
+  return json.data ?? [];
+}
+
+export async function fetchGalleryImages(galleryId) {
+  const response = await fetch(`${API_BASE_URL}/gallery-images/${galleryId}`);
+  if (!response.ok) throw new Error(`Failed to fetch gallery images: ${response.status}`);
+  const json = await response.json();
+  return json.data ?? [];
 }
 
 export async function fetchTestimonials() {

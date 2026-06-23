@@ -8,6 +8,12 @@ export interface TestimonialFilters {
   search?: string
 }
 
+function toFormData(payload: Record<string, any>): FormData {
+  const fd = new FormData()
+  Object.entries(payload).forEach(([k, v]) => v !== undefined && fd.append(k, v))
+  return fd
+}
+
 export const testimonialService = {
   getAll(filters?: TestimonialFilters): Promise<PaginatedResponse<Testimonial>> {
     return apiClient.get('/testimonials', { params: filters })
@@ -18,10 +24,22 @@ export const testimonialService = {
   },
 
   create(payload: CreateTestimonialPayload): Promise<Testimonial> {
+    if (payload.photo) {
+      return apiClient.post('/testimonials', toFormData(payload), {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+    }
     return apiClient.post('/testimonials', payload)
   },
 
   update(id: number, payload: UpdateTestimonialPayload): Promise<Testimonial> {
+    if (payload.photo) {
+      const fd = toFormData(payload)
+      fd.append('_method', 'PUT')
+      return apiClient.post(`/testimonials/${id}`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+    }
     return apiClient.put(`/testimonials/${id}`, payload)
   },
 

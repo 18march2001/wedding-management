@@ -23,7 +23,7 @@ class GalleryCategoryRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = $this->route('gallery_category') ?? $this->route('gallery-category');
+        $categoryId = $this->route('gallery_category');
         $id = is_object($categoryId) ? $categoryId->id : $categoryId;
 
         return [
@@ -40,6 +40,8 @@ class GalleryCategoryRequest extends FormRequest
                 'max:255',
                 Rule::unique('gallery_category', 'slug')->ignore($id),
             ],
+            'image' => 'nullable|image|max:5120',
+            'video' => 'nullable|mimetypes:video/mp4,video/webm,video/ogg,video/quicktime|max:102400',
         ];
     }
 }

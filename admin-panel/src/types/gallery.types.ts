@@ -4,6 +4,8 @@ export interface GalleryCategory {
   name: string
   slug: string
   description?: string
+  image_url?: string
+  video_url?: string
   created_at: string
   updated_at: string
 }
@@ -11,6 +13,8 @@ export interface GalleryCategory {
 export interface CreateGalleryCategoryPayload {
   name: string
   description?: string
+  image?: File
+  video?: File
 }
 
 export interface UpdateGalleryCategoryPayload extends Partial<CreateGalleryCategoryPayload> {}

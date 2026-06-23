@@ -23,7 +23,7 @@ class GalleryResource extends JsonResource
             ]),
             'cover_image_url'     => $cover ? $cover->getUrl() : null,
             'cover_thumb_url'     => $cover ? ($cover->hasGeneratedConversion('thumb') ? $cover->getUrl('thumb') : $cover->getUrl()) : null,
-            'images_count'        => $this->getMedia('gallery')->count(),
+            'images_count'        => $this->images_count ?? $this->getMedia('gallery')->count(),
             'created_at'          => $this->created_at,
         ];
     }

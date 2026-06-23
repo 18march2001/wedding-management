@@ -17,6 +17,7 @@ class TestimonialRequest extends FormRequest
         return [
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
+            'photo'       => 'nullable|image|max:5120',
         ];
     }
 }

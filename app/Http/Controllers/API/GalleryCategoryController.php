@@ -39,6 +39,14 @@ class GalleryCategoryController extends Controller
     {
         $category = $this->service->createCategory($request->validated());
 
+        if ($request->hasFile('image')) {
+            $category->addMediaFromRequest('image')->toMediaCollection('category_image');
+        }
+
+        if ($request->hasFile('video')) {
+            $category->addMediaFromRequest('video')->toMediaCollection('category_video');
+        }
+
         return new GalleryCategoryResource($category);
     }
 
@@ -66,6 +74,16 @@ class GalleryCategoryController extends Controller
         }
 
         $updatedCategory = $this->service->updateCategory((int) $id, $request->validated());
+
+        if ($request->hasFile('image')) {
+            $updatedCategory->clearMediaCollection('category_image');
+            $updatedCategory->addMediaFromRequest('image')->toMediaCollection('category_image');
+        }
+
+        if ($request->hasFile('video')) {
+            $updatedCategory->clearMediaCollection('category_video');
+            $updatedCategory->addMediaFromRequest('video')->toMediaCollection('category_video');
+        }
 
         return new GalleryCategoryResource($updatedCategory);
     }

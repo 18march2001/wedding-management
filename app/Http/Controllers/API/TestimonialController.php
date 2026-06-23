@@ -34,6 +34,10 @@ class TestimonialController extends Controller
     {
         $testimonial = $this->service->createTestimonial($request->validated());
 
+        if ($request->hasFile('photo')) {
+            $testimonial->addMediaFromRequest('photo')->toMediaCollection('testimonial_photo');
+        }
+
         return new TestimonialResource($testimonial);
     }
 
@@ -45,6 +49,11 @@ class TestimonialController extends Controller
     public function update(TestimonialRequest $request, int $id)
     {
         $testimonial = $this->service->updateTestimonial($id, $request->validated());
+
+        if ($request->hasFile('photo')) {
+            $testimonial->clearMediaCollection('testimonial_photo');
+            $testimonial->addMediaFromRequest('photo')->toMediaCollection('testimonial_photo');
+        }
 
         return new TestimonialResource($testimonial);
     }
