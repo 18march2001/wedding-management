@@ -5,6 +5,7 @@ export type { ApiResponse, PaginatedResponse, ApiError, PaginationParams } from 
 export type {
   GalleryCategory,
   Gallery,
+  GalleryImage,
   CreateGalleryCategoryPayload,
   UpdateGalleryCategoryPayload,
   CreateGalleryPayload,
