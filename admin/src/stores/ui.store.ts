@@ -54,9 +54,9 @@ export const useUiStore = defineStore('ui', () => {
   const addNotification = (notification: Omit<Notification, 'id'>): string => {
     const id = `notification-${Date.now()}`
     const fullNotification: Notification = {
-      id,
-      duration: 5000,
       ...notification,
+      id,
+      duration: notification.duration ?? 5000,
     }
 
     notifications.value.push(fullNotification)

@@ -75,7 +75,7 @@ export const useGalleryStore = defineStore('gallery', () => {
 
   const deleteImage = async (mediaId: number) => {
     await galleryService.deleteImage(mediaId)
-    images.value = images.value.filter((img) => img.id !== mediaId)
+    images.value = images.value.filter((img: GalleryImage) => img.id !== mediaId)
   }
 
   return {

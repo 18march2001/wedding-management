@@ -50,7 +50,7 @@ class ApiClient {
 
         if (error.response) {
           const data = error.response.data as any
-          apiError.message = data?.message || error.statusText || 'Server error'
+          apiError.message = data?.message || error.response?.statusText || 'Server error'
           apiError.code = error.response.status
           apiError.errors = data?.errors || undefined
 
